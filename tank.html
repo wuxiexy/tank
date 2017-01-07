@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>tank</title>
+    <link rel="shortcut icon" type="image/gif" href="images/tank.jpg" />
+
+</head>
+<body onkeydown="getCommand()">
+	<h3>html5 经典游戏坦克大战</h3>
+
+	<canvas id="tankWarp" width="500px" height="400px" style="background-color:black"></canvas><br />
+
+	<pre>
+	w -> 上， d -> 右， s -> 下，  a -> 左,  j -> 子弹
+		
+	ps:　请用 IE 浏览器测试
+	</pre>
+
+	<!-- ----------------------------------------------------------------------------------------------- -->
+	<script type="text/javascript" src="tank.js"></script>
+	<script type="text/javascript">
+
+		var canvas=document.getElementById("tankWarp");
+		var cxt=canvas.getContext("2d");
+
+
+		var tank=new Hero(100,100,0,heroColor);        // hero
+		var heroBullets=new Array();                   //子弹数组
+		var enemyTanks=new Array();                    //看空的数组，存放敌人坦克
+
+
+		for(var i=0; i<3; i++){
+			var enemytank=new EnemyTank((i+1)*50,0,1);
+			enemyTanks[i]=enemytank;
+		}
+
+		flashTankMap();
+
+		// 定时刷新作战区
+		function flashTankMap(){
+			cxt.clearRect(0,0,500,400);    				 //每次按键都会重新画一次，所以每次按键画之前都要记得清屏
+			drawTank(tank);                				 //我的坦克
+			drawHeroBullet();            				 //画出自己的子弹
+			for(var i=0; i<3; i++){
+				drawTank(enemyTanks[i]); 				 //敌人的坦克
+			}
+		}
+
+		//接收用户信息
+		function getCommand(){
+			var code=event.keyCode;
+			switch(code){
+				case 87:                //向上
+					tank.moveUp();
+					break;
+				case 83:
+					tank.moveDown();  //向下
+					break;
+				case 65:
+					tank.moveLeft();   //向左
+					break;
+				case 68:
+					tank.moveRight();   //向右
+					break;
+				case 74:
+					tank.shotEnemy();   //子弹
+					break;
+			}
+
+			flashTankMap();
+
+			window.setInterval("flashTankMap()",3000);
+		}
+	</script>
+
+
+</body>
+</html>
